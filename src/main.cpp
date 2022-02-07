@@ -16,12 +16,12 @@
 #include "vex.h"
 
 using namespace vex;
-void linedrive (double distance, double dir, float velocity, double porportion) {
+void linedrive (double distance, double dir, float velocity, double porportion, double slowdown) {
   //higher porportion causes the pid "reacting" turning amount to be higher
   //lower porportion causes the pid "reacting" turning amount to be lower
   //velocity changes base speed
   //just set dir to 0
-
+  //slowdown is the decellaration multiplier, higher it is the more it slows down.
   Inertial.resetHeading();
   Inertial.resetRotation();
   if (velocity > 0) {
@@ -41,8 +41,8 @@ void linedrive (double distance, double dir, float velocity, double porportion) 
         Mobile.Screen.print(":inches_value");
         //actual pid
         double out = distance-(((LeftDriveSmart.rotation(rotationUnits::deg)+RightDriveSmart.rotation(rotationUnits::deg))/2)*12.57/360);
-        LeftDriveSmart.spin(vex::directionType::fwd, (velocity-out*10)-(dir-(Inertial.yaw()*porportion)), vex::velocityUnits::pct);
-        RightDriveSmart.spin(vex::directionType::fwd, (velocity-out*10)+(dir-(Inertial.yaw()*porportion)), vex::velocityUnits::pct);
+        LeftDriveSmart.spin(vex::directionType::fwd, (velocity-out*slowdown)-(dir-(Inertial.yaw()*porportion)), vex::velocityUnits::pct);
+        RightDriveSmart.spin(vex::directionType::fwd, (velocity-out*slowdown)+(dir-(Inertial.yaw()*porportion)), vex::velocityUnits::pct);
       } else {
         //normal
         //displayinfo
@@ -78,8 +78,8 @@ void linedrive (double distance, double dir, float velocity, double porportion) 
         Mobile.Screen.print(":inches_value");
         //actual pid
         double out = distance-(((LeftDriveSmart.rotation(rotationUnits::deg)+RightDriveSmart.rotation(rotationUnits::deg))/2)*12.57/360);
-        LeftDriveSmart.spin(vex::directionType::fwd, (velocity-out*10)+(dir-(Inertial.yaw()*porportion)), vex::velocityUnits::pct);
-        RightDriveSmart.spin(vex::directionType::fwd, (velocity-out*10)-(dir-(Inertial.yaw()*porportion)), vex::velocityUnits::pct);
+        LeftDriveSmart.spin(vex::directionType::fwd, (velocity-out*slowdown)+(dir-(Inertial.yaw()*porportion)), vex::velocityUnits::pct);
+        RightDriveSmart.spin(vex::directionType::fwd, (velocity-out*slowdown)-(dir-(Inertial.yaw()*porportion)), vex::velocityUnits::pct);
       } else{
         //normal
         //displayinfo
