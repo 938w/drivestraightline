@@ -28,7 +28,7 @@ void linedrive (double distance, double dir, float velocity, double porportion, 
     //driving forward
     while (((LeftDriveSmart.rotation(rotationUnits::deg)+RightDriveSmart.rotation(rotationUnits::deg))/2)*12.57/360 < distance) {
       //getting closer
-      if(((LeftDriveSmart.rotation(rotationUnits::deg)+RightDriveSmart.rotation(rotationUnits::deg))/2)*12.57/360 > (distance-5)) {
+      if(((LeftDriveSmart.rotation(rotationUnits::deg)+RightDriveSmart.rotation(rotationUnits::deg))/2)*12.57/360 > (distance-6)) {
         Mobile.Screen.clearScreen();
         Mobile.Screen.newLine();
         Mobile.Screen.print(((dir-(Inertial.yaw())*porportion)));
@@ -65,7 +65,7 @@ void linedrive (double distance, double dir, float velocity, double porportion, 
     //driving backwards
     while (((LeftDriveSmart.rotation(rotationUnits::deg)+RightDriveSmart.rotation(rotationUnits::deg))/2)*12.57/360 > distance) {
       //getting closer 
-      if(((LeftDriveSmart.rotation(rotationUnits::deg)+RightDriveSmart.rotation(rotationUnits::deg))/2)*12.57/360 < (distance+5)) {
+      if(((LeftDriveSmart.rotation(rotationUnits::deg)+RightDriveSmart.rotation(rotationUnits::deg))/2)*12.57/360 < (distance+6)) {
         Mobile.Screen.clearScreen();
         Mobile.Screen.newLine();
         Mobile.Screen.print(((dir-(Inertial.yaw())*porportion)));
@@ -99,12 +99,18 @@ void linedrive (double distance, double dir, float velocity, double porportion, 
       }
     }
   }
-  LeftDriveSmart.stop(brakeType::hold);
-  RightDriveSmart.stop(brakeType::hold);
+  LeftDriveSmart.stop(brakeType::brake);
+  RightDriveSmart.stop(brakeType::brake);
 }
-
+class pid {
+  public:
+    void drivestraight (double distance, double dir, float velocity, double porportion, double slowdown) {
+      linedrive(distance,dir,velocity,porportion,slowdown);
+    }
+};
+pid PID;
 int main() {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
-  
+  PID.drivestraight(20,0,90,1.5,5);
 }
